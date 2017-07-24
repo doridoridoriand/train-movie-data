@@ -11,6 +11,7 @@ import re
 import sys
 import tarfile
 import json
+import collections as cl
 
 FLAGS    = None
 DATA_URL = 'http://download.tensorflow.org/models/image/imagenet/inception-2015-12-05.tgz'
@@ -88,11 +89,19 @@ def run_inference_on_image(image):
 
         top_k = predictions.argsort()[-FLAGS.num_top_predictions:][::-1]
 
-        json_body = {}
+        json_body = cl.OrderedDict()
         for node_id in top_k:
+            data = cl.OrderedDict()
             human_string = node_lookup.id_to_string(node_id)
             score        = predictions[node_id]
+            data['human_string'] = node_lookup.id_to_string(node_id)
+            data['score']        = str(predictions[node_id])
             print('%s (score = %.5f)' % (human_string, score))
+            json_body[str(node_id)] = data
+
+        fw = open('aaaaaa.json', 'w')
+        json.dump(json_body, fw, indent = 4)
+
 
 def maybe_download_and_extract():
     dest_directory = FLAGS.model_dir
