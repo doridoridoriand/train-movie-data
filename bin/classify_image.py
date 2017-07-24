@@ -99,7 +99,7 @@ def run_inference_on_image(image):
             print('%s (score = %.5f)' % (human_string, score))
             json_body[str(node_id)] = data
 
-        fw = open('aaaaaa.json', 'w')
+        fw = open(image.split('/')[-1].replace('.png', '') + '.json', 'w')
         json.dump(json_body, fw, indent = 4)
 
 
