@@ -14,7 +14,7 @@ import json
 import collections as cl
 
 FLAGS    = None
-DATA_URL = 'http://download.tensorflow.org/models/image/imagenet/inception-2015-12-05.tgz'
+DATA_URL = 'https://s3.amazonaws.com/doridoridoriand-virginia/assets/tensorflow/inception-2015-12-05.tgz'
 
 class NodeLookup(object):
     def __init__(self, label_lookup_path = None, uid_lookup_path = None):
@@ -99,7 +99,7 @@ def run_inference_on_image(image):
             print('%s (score = %.5f)' % (human_string, score))
             json_body[str(node_id)] = data
 
-        fw = open(image.split('/')[-1].replace('.png', '') + '.json', 'w')
+        fw = open('../json/' + image.split('/')[-1].replace('.png', '') + '.json', 'w')
         json.dump(json_body, fw, indent = 4)
 
 
@@ -126,15 +126,12 @@ def maybe_download_and_extract():
 
 
 
-#maybe_download_and_extract()
-#image = FLAGS.image_file
-#run_inference_on_image(image)
-
 def main(_):
   maybe_download_and_extract()
-  image = (FLAGS.image_file if FLAGS.image_file else
-           os.path.join(FLAGS.model_dir, 'cropped_panda.jpg'))
-  run_inference_on_image(image)
+  images = os.listdir(FLAGS.image_dir)
+
+  for image in images:
+    run_inference_on_image(FLAGS.image_dir + '/' + image)
 
 
 if __name__ == '__main__':
@@ -156,10 +153,10 @@ if __name__ == '__main__':
       """
   )
   parser.add_argument(
-      '--image_file',
+      '--image_dir',
       type=str,
       default='',
-      help='Absolute path to image file.'
+      help='Absolute path to image directory.'
   )
   parser.add_argument(
       '--num_top_predictions',
