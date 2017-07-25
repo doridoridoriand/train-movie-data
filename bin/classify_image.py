@@ -27,12 +27,6 @@ class NodeLookup(object):
         self.node_lookup = self.load(label_lookup_path, uid_lookup_path)
 
     def load(self, label_lookup_path, uid_lookup_path):
-        #if not tf.gfile.Exists(uid_lookup_path):
-        #    tf.logging.fatal('File does not exist %s', uid_lookup_path)
-
-        #if not tf.gfile.Exists(label_lookup_path):
-        #    tf.logging.fatal('File does not exist %s', label_lookup_path)
-
         proto_as_ascii_lines = tf.gfile.GFile(uid_lookup_path).readlines()
         uid_to_human = {}
         p = re.compile(r'[n\d]*[ \S,]*')
@@ -55,8 +49,6 @@ class NodeLookup(object):
 
         node_id_to_name = {}
         for key, val in node_id_to_uid.items():
-            #if val not in uid_to_human:
-            #    tf.logging.fatal('Failed to locate: %s', val)
             node_id_to_name[key] = uid_to_human[val]
 
         return node_id_to_name
@@ -72,10 +64,9 @@ def create_graph():
         graph_def = tf.GraphDef()
         graph_def.ParseFromString(f.read())
         _ = tf.import_graph_def(graph_def, name='')
+        f.close()
 
 def run_inference_on_image(image):
-    #if not tf.gfile.Exists(image):
-    #    tf.logging.fatal('File does not exist %s', image)
     image_data = tf.gfile.FastGFile(image, 'rb').read()
 
     create_graph()
@@ -101,8 +92,7 @@ def run_inference_on_image(image):
 
         fw = open('../json/' + image.split('/')[-1].replace('.png', '') + '.json', 'w')
         json.dump(json_body, fw, indent = 4)
-        sess.close()
-
+        fw.close()
 
 def maybe_download_and_extract():
     dest_directory = FLAGS.model_dir
@@ -132,17 +122,12 @@ def main(_):
   images = os.listdir(FLAGS.image_dir)
 
   for image in images:
-    run_inference_on_image(FLAGS.image_dir + '/' + image)
+      with tf.Graph().as_default():
+        run_inference_on_image(FLAGS.image_dir + '/' + image)
 
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
-  # classify_image_graph_def.pb:
-  #   Binary representation of the GraphDef protocol buffer.
-  # imagenet_synset_to_human_label_map.txt:
-  #   Map from synset ID to a human readable string.
-  # imagenet_2012_challenge_label_map_proto.pbtxt:
-  #   Text representation of a protocol buffer mapping a label to synset ID.
   parser.add_argument(
       '--model_dir',
       type=str,
