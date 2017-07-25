@@ -101,6 +101,7 @@ def run_inference_on_image(image):
 
         fw = open('../json/' + image.split('/')[-1].replace('.png', '') + '.json', 'w')
         json.dump(json_body, fw, indent = 4)
+        sess.close()
 
 
 def maybe_download_and_extract():
