@@ -1,4 +1,4 @@
-# Tranin Movie Data
+# Train Movie Data
 
 ## Dependencies
 ### divide.py
