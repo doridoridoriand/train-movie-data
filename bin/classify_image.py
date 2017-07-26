@@ -64,6 +64,7 @@ def create_graph():
         graph_def = tf.GraphDef()
         graph_def.ParseFromString(f.read())
         _ = tf.import_graph_def(graph_def, name='')
+        # with使っているからcloseするはずだけれどしていない疑惑があるので明示的に書いている
         f.close()
 
 def run_inference_on_image(image):
@@ -92,6 +93,7 @@ def run_inference_on_image(image):
 
         fw = open('../json/' + image.split('/')[-1].replace('.png', '') + '.json', 'w')
         json.dump(json_body, fw, indent = 4)
+        # with使っているからcloseするはずだけれどしていない疑惑があるので明示的に書いている
         fw.close()
 
 def maybe_download_and_extract():
