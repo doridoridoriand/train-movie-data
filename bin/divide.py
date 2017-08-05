@@ -47,6 +47,9 @@ while(cap.isOpened()):
                 arguments.additional_prefix +
                 arguments.filename.split(".")[0] +
                 '%s' % str(i).zfill(10) + '.png', frame)
-    logging.info('FRAME: ' + arguments.additional_prefix + '-%s' % str(i).zfill(10) + 'saved.')
+    logging.info('FRAME: ' +
+                 arguments.additional_prefix +
+                 arguments.filename.split(".")[0] +
+                 '-%s' % str(i).zfill(10) + 'saved.')
     i += 1
 
