@@ -1,4 +1,4 @@
-# Rekognite Movie Data
+# Recognite Movie Data
 
 ## Dependencies
 ### divide.py
