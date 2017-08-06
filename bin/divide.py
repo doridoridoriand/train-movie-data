@@ -12,7 +12,7 @@ parser.add_argument('filename',
                     default = None,
                     type = str,
                     choices = None,
-                    help = 'Please input source movie filename',
+                    help = 'Please input source movie filename which is in source directory',
                     metavar = None)
 parser.add_argument('-p', '--additional-prefix',
                     action = 'store',
