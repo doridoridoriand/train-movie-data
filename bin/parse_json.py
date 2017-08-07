@@ -22,7 +22,8 @@ def difference(content, entry):
     previous = content[1][0].values()
     matched = list(set(concat(current)) & set(concat(previous)))
     absolute_difference = abs(len(matched) - len(previous))
-    logging.info('Frame Number: ' + entry + ' Absolute Difference: ' + str(absolute_difference))
+    logging.info('Frame Number: ' + entry.split('_')[-1].split('.')[0] + ' Absolute Difference: ' + str(absolute_difference))
+    print('Frame Number: ' + entry.split('_')[-1].split('.')[0] + ' Absolute Difference: ' + str(absolute_difference))
 
 def absolute_filepath(filepath, filename):
     return filepath + '/' + filename
